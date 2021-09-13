@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from marshmallow_dataclass import dataclass
 from marshmallow.exceptions import ValidationError
 from shared.weather_storage import WeatherStorage
@@ -31,9 +31,15 @@ def run_server():
                 if response.entries:
                     return jsonify(response)
                 else:
-                    return "Not Found 404"
-            except ValidationError:
-                print("Validation failed. Return 400")
+                    return Response(
+                        "Not Found 404",
+                        status=400,
+                    )
+            except ValidationError as err:
+                return Response(
+                    str(err),
+                    status=400,
+                )
 
     app.run(host='0.0.0.0', port=8000, debug=False)
     connection.close()

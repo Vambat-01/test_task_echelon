@@ -114,7 +114,9 @@ class WeatherStorage:
         :param end: конец поиска
         """
         cities = []
-        cities_table = self.connection.execute("SELECT * FROM cities WHERE id > ? and id < ?", (start, end))
+        with self.connection_lock:
+            with self.connection:
+                cities_table = self.connection.execute("SELECT * FROM cities WHERE id > ? and id < ?", (start, end))
         for city in cities_table:
             cities.append(Record(City(city[1], city[2], city[3], city[4]), city[0]))
         return cities
