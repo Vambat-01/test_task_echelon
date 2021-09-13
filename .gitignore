@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Default ignored dir and files
+/weather_db.sqlite
+.idea/
